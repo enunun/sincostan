@@ -1,0 +1,77 @@
+\ProvidesPackage{nogutaku}[2020/01/22 v0.2]
+\RequirePackage{amsmath,braket,mleftright,ifthen,bm}
+\RequirePackage{xparse,xfrac}
+
+\NewDocumentCommand\setfraction{}{%
+  \DeclareDocumentCommand\nogu@frac@d{m m}{%
+    \displaystyle{%
+    \genfrac{}{}{}{}{\raisebox{-.44ex} {$\,##1\,$}} {\raisebox{.1ex}{$\,##2\,$}} }%
+  }%
+  \DeclareDocumentCommand\nogu@frac@t{m O{} m}{%
+    \textstyle{{##1}{##2 /}{##3}}%
+  }%
+  \DeclareDocumentCommand\nogu@frac@s{m O{} m}{\scriptstyle{##1}{##2 /}{##3}}
+  \DeclareDocumentCommand\nogu@frac@ss{m O{} m}{\scriptscriptstyle{##1}{##2 /}{##3}}
+  %
+  \DeclareDocumentCommand\frac{m O{} m}{%
+    \mathchoice{\nogu@frac@d{##1}{##3}}{\nogu@frac@t{##1}[##2]{##3}}{\nogu@frac@s{##1}[##2]{##3}}{\nogu@frac@ss{##1}[##2]{##3}}%
+  }%
+}
+
+\NewDocumentCommand\unsetfraction{}{%
+  \DeclareDocumentCommand\frac{m m}{\genfrac{}{}{}{}{##1}{##2}}%
+}
+
+\ProvideDocumentCommand\paren{s m}{%
+  \IfBooleanTF{#1}{\mleft( #2 \mright)}{\left( #2 \right)}%
+}
+\ProvideDocumentCommand\braces{s m}{%
+  \IfBooleanTF{#1}{\mleft \{ #2 \mright \} }{\left\{ #2 \right\}}%
+}
+\ProvideDocumentCommand\angbracket{s m}{%
+  \IfBooleanTF{#1}{\mleft \langle #2 \mright \rangle}{\left \langle #2 \right \rangle}%
+}
+\ProvideDocumentCommand\sqbracket{s m}{%
+  \IfBooleanTF{#1}{\mleft [ #2 \mright ]}{\left[ #2 \right]}%
+}
+
+\ProvideDocumentCommand\interval{m m}{%
+  \ifthenelse{\equal{#1}{op}}{\paren{#2}}{}%
+  \ifthenelse{\equal{#1}{osq}}{\left] #2 \right[}{}%
+  \ifthenelse{\equal{#1}{c}}{\sqbracket{#2}}{}%
+  \ifthenelse{\equal{#1}{lop}}{\left( #2 \right]}{}%
+  \ifthenelse{\equal{#1}{rop}}{\left[ #2 \right)}{}%
+  \ifthenelse{\equal{#1}{losq}}{\left] #2 \right]}{}%
+  \ifthenelse{\equal{#1}{rosq}}{\left[ #2 \right[}{}%
+}
+
+\ProvideDocumentCommand\absolute{m}{\left \lvert #1 \right \rvert}
+\ProvideDocumentCommand\norm{o m}{%
+  \IfValueTF{#1}{\left\| #2 \right\|_{#1}}%
+  {\left\| #2 \right\|}%
+}
+\ProvideDocumentCommand\floor{m}{\left \lfloor #1 \right \rfloor}
+
+\ProvideDocumentCommand\apply{s m m}{%
+  \IfBooleanTF{#1}{#2 #3}{{#2}\paren*{#3}}%
+}
+
+\ProvideDocumentCommand\setextension{m}{\braces{#1}}
+\NewDocumentCommand\setbound{}{|}
+\ProvideDocumentCommand\setintension{m m}{\Set{#1 \setbound #2}}
+
+\NewDocumentCommand\usebbnumbersset{}{%
+  \DeclareDocumentCommand\numbersset{m}{\mathbb{##1}}%
+}
+\NewDocumentCommand\usebfnumbersset{}{%
+  \DeclareDocumentCommand\numbersset{m}{\mathbf{##1}}%
+}
+\NewDocumentCommand\usebmnumbersset{}{%
+  \DeclareDocumentCommand\numbersset{m}{\bm{##1}}%
+}
+\usebbnumbersset
+\NewDocumentCommand\Natural{}{\numbersset{N}}
+\NewDocumentCommand\Zahlen{}{\numbersset{Z}}
+\NewDocumentCommand\Quotient{}{\numbersset{Q}}
+\NewDocumentCommand\Real{}{\numbersset{R}}
+\NewDocumentCommand\Complex{}{\numbersset{C}}

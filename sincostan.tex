@@ -1,0 +1,538 @@
+\documentclass[11pt,a4paper]{ltjsarticle}
+\usepackage{luatexja-fontspec}
+\usepackage{amsthm}
+\usepackage{enumitem}
+\usepackage{sty/nogutaku}
+%\usepackage{unicode-math}
+%\setmathfont{Latin Modern Math}
+\usepackage{amssymb}
+\usepackage[colorlinks=true,unicode,linkbordercolor={0 0 0}]{hyperref}
+\usepackage{cleveref}
+\usepackage{authblk}
+\usepackage{diffcoeff}
+\usepackage{bigints}
+\usepackage[margin=25mm,truedimen]{geometry}
+%
+%
+%
+%
+\setfraction
+%
+%
+\newcommand*{\definition}[1]{\textbf{#1}}
+\newcommand*{\length}[1]{\overline{#1}}
+\newcommand*{\equivalent}{\Longleftrightarrow}
+\newcommand*{\coord}[1]{\paren{#1}}
+\newcommand*{\maparrow}{\rightarrow}
+\newcommand*{\intd}{\dl2}
+\newcommand*{\restrict}{\upharpoonleft}
+\newcommand*{\image}[2]{#1 \sqbracket*{#2}}
+\newcommand*{\inv}[1]{{#1}^{-1}}
+\delimitershortfall = -0.5pt
+%
+%
+%
+\crefname{figure}{図}{図}
+\crefname{equation}{式}{式}
+\crefname{que}{問}{問}
+\crefname{ans}{解答}{解答}
+\crefname{lemma}{補題}{補題}
+%
+%
+\theoremstyle{definition}
+%
+%
+\setlist[1]{
+labelindent = \parindent,
+itemindent = \parindent
+}
+\setlist[enumerate,1]{
+  label = {(\arabic*)},
+  ref = \arabic*
+}
+%
+\newtheorem{dfn}{定義}[section]
+\newtheorem{thm}[dfn]{定理}
+\newtheorem{ex}[dfn]{例}
+\newtheorem{que}[dfn]{問題}
+\newtheorem{ans}[dfn]{解答}
+\newtheorem{lemma}[dfn]{補題}
+\newtheorem{coro}[dfn]{系}
+
+%
+\title{高校数学$+\alpha$でできる（実）三角関数論の精密化}
+\author{野口匠}
+\affil{高知工科大学大学院工学研究科}
+\date{\today}
+
+\begin{document}
+%
+\maketitle
+
+\begin{abstract}
+  「高校の数学Ⅲの教科書における$\lim_{x \to 0} \frac{\sin x}{x} = 1$の証明は循環論法である」
+  という主張は受験業界でたびたび耳にする．そして，「循環論法を回避する方法」として，無限級数や微分方程式を用いた
+  やや高度な前提知識を要するもの，あるいは高度な前提知識こそ不要であるが直感的でないもの
+  が提示されることもある．本稿では，「（実数の範囲での）三角関数論は高校の教科書に載っている事項
+  （および積分に関する基本事項）のみで厳密に展開することができ，
+  かつ高校の教科書での議論の展開の仕方を大きく修正する必要はない」ということを実例でもって示す．
+  なお，本稿で提示する内容は筆者オリジナルのものではなく，インターネット上に断片的に存在する情報をまとめ上げたのみである．
+\end{abstract}
+
+
+\section{準備} \label{sec:pre}
+
+\subsection{記法} \label{subsec:notation}
+
+この記事では，以下のような表記法を採用する．
+なお，高校の教科書における流儀とは異なる部分が多数見られるので注意せよ．
+
+\begin{itemize}
+  \item 点を表す記号は高校の教科書ではローマン体で$\mathrm{A}, \mathrm{B}, \dotsc$のように
+    書かれることが多いが，この記事では通常の変数と同じく$A,B, \dotsc$のようにイタリック体で表記する．
+  \item なんらかの対象に関する条件$\varphi$に対し，対象$x$が条件$\varphi$を満たすという主張を$\apply{\varphi}{x}$と表す．
+  \item 集合$S$と条件$\varphi$に対し，$\varphi$を満たす$S$の元全体の集合を$\setintension{x \in S}{\apply{\varphi}{x}}$と表す．
+  \item 平面上の点$A,B$に対し，線分$AB$の長さを$\length{AB}$と表す．$\length{AB}$は$A,B$の距離に相当する．
+  \item 実数全体の集合を$\Real$で，（ユークリッド）平面を$\Real ^2$でそれぞれ表す．
+    $x \in \Real$は$x$が実数であることを，$P \in \Real ^2$は$P$が平面上の点であることをそれぞれ表す．
+  \item 「座標が$\coord{a,b}$であるような点$P$」を
+    この記事では「$P = \coord{a,b}$」と表すこととする．
+  \item 2つの主張$\varphi, \psi$について，$\varphi$が真であるならば必ず$\psi$も真であること，
+    および$\varphi$と$\psi$が同値であることをそれぞれ$\varphi \implies \psi$と$\varphi \equivalent \psi$で表す．
+  \item $x < y$または$x = y$であることを表す不等号として$x \leq y$を用いる．
+  \item この記事では，特に断らない限り「平面上の点」を単に「点」と表すことがある．
+  \item 実数の連続性に起因する関数や広義積分の性質に関しては深入りしない．これらに関しては初等的な微分積分学の教科書を参照せよ．
+  \item 集合や写像の概念，記法は既知とする．ここでの「写像」は「関数」と読み替えてまったく問題ない．
+\end{itemize}
+
+\subsection{微分積分学からの準備} \label{subsec:calculus}
+
+三角関数が曲線の長さや逆関数を用いて記述される以上，
+実数の連続性に関する議論を避けることはできない．
+ここでは，その中でも特に重要なものを証明抜きで列挙する．
+
+
+\begin{thm} \label{thm:invderi}
+  関数$s \colon X \maparrow Y$は全単射で，かつ$X$上で微分可能であるとする．
+  このとき，任意の$x \in X$に対して$\apply{f'}{x} \neq 0$であるならば，
+  $f$の逆関数$\inv{f} \colon Y \maparrow X$は$Y = \image{f}{X}$上の
+  各点$b = \apply{f}{a}$ ($a \in X$)で微分可能であって，
+  \begin{align}
+    \apply{\paren{\inv{f}}'}{b} = \frac{1}{\apply{f'}{a}} \text{．}
+  \end{align}
+\end{thm}
+
+\begin{thm} \label{thm:injection}
+  狭義単調関数は単射である．
+\end{thm}
+
+\begin{thm} \label{thm:image}
+  閉区間$\interval{c}{a,b}$上で定義された連続関数$f \colon \interval{c}{a,b} \maparrow \Real$は
+  最大値と最小値をもち，その最大値と最小値をそれぞれ$M,m$とおくと，
+  $f$の値域$\image{f}{\interval{c}{a,b}}$は閉区間$\interval{c}{m,M}$である．
+  すなわち，任意の$x \in \interval{c}{a,b}$に対して$m \leq \apply{f}{x} \leq M$であり，
+  かつ任意の$\gamma \in \interval{c}{m,M}$に対して$\apply{f}{c} = \gamma$となる
+  $c \in \interval{c}{a,b}$が存在する．
+  特に，$f$の終域を閉区間$\interval{c}{m,M}$にとりかえて得られる写像
+  \begin{align}
+    \interval{c}{a,b} \ni x \mapsto \apply{f}{x} \in \interval{c}{m,M}
+    \label{eq:surjec}
+  \end{align}
+  は全射である．
+\end{thm}
+
+\begin{thm}[微分積分学の基本定理] \label{thm:int}
+  閉区間$\interval{c}{a,b}$上で定義された連続関数$f \colon \interval{c}{a,b}$
+  の定積分
+  \begin{align}
+    \int_a^b \apply{f}{x} \intd x
+    \label{eq:int}
+  \end{align}
+  の値が（適切な定義のもとで）確定する．
+  さらに，任意の$c \in \interval{c}{a,b}$に対し，関数
+  \[
+    \interval{c}{a,b} \ni x \mapsto \int_c^x \apply{f}{t} \intd t \in \Real
+  \]
+  は開区間$\interval{op}{a,b}$上で微分可能であって，各$x \in \interval{op}{a,b}$に対して
+  \begin{align}
+    \diff*{\int_c^x \apply{f}{t} \intd t}x = \apply{f}{x}
+    \label{eq:intderi}
+  \end{align}
+  が成り立つ．
+\end{thm}
+
+\begin{dfn} \label{dfn:impint}
+  半開区間$\interval{lop}{a,b}$上で定義された連続関数$f \colon \interval{lop}{a,b} \maparrow \Real$について，
+  極限
+  \begin{align}
+    \lim_{\varepsilon \to +0} \int_{a + \varepsilon}^b \apply{f}{x} \intd x
+    \label{eq:impintlim}
+  \end{align}
+  を$f$の\definition{広義積分}といい，
+  \begin{align}
+    \int_a^b \apply{f}{x} \intd x
+    \label{eq:impint}
+  \end{align}
+  と表す．\Cref{eq:impintlim}が収束する場合，その極限値をこの広義積分の値とする．
+  また，$f$の定義域を半開区間$\interval{rop}{a,b}$におきかえたものに対しても同様にして広義積分を定義する．
+  さらに，開区間上$\interval{op}{a,b}$上で定義された連続関数$f \colon \interval{op}{a,b} \maparrow \Real$
+  に対しては，$c \in \interval{op}{a,b}$の任意にとり，2つの広義積分
+  \begin{align*}
+    \int_a^c \apply{f}{x} \intd x , \int_c^b \apply{f}{b} \intd x
+  \end{align*}
+  がともに収束する場合，
+  \begin{align}
+    \int_a^b \apply{f}{x} \intd x = \int_a^c \apply{f}{x} \intd x + \int_c^b \apply{f}{x} \intd x
+    \label{eq:impintop}
+  \end{align}
+  として$f$の広義積分の値を定義する．この値は$c$に依存しない．
+
+  無限区間$\interval{rop}{a, \infty}$で定義された連続関数$f \colon \interval{rop}{a , +\infty} \maparrow \Real$
+  に対しては，
+  極限
+  \begin{align}
+    \lim_{M \to \infty} \int_a^M \apply{f}{x} \intd x
+    \label{eq:impliminfty}
+  \end{align}
+  を$f$の広義積分といい，
+  \begin{align}
+    \int_a^{\infty} \apply{f}{x} \intd x
+    \label{eq:impintinfty}
+  \end{align}
+  と表す．\Cref{eq:impliminfty}が収束する場合にその極限値をこの広義積分の値とする点は同様である．
+  その他の無限区間上で定義された連続関数の広義積分も上記のものと同様に定義する．
+\end{dfn}
+
+\begin{thm} \label{thm:impintconv}
+  半開区間$\interval{lop}{a,b}$上で定義された連続関数$f \colon \interval{lop}{a,b} \maparrow \Real$
+  について，極限
+  \begin{align}
+    \lim_{x \to a+0} \paren{x - a}^p \absolute{\apply{f}{x}}
+    \label{eq:limimpint}
+  \end{align}
+  が有限確定であるような$0 < p < 1$を満たす実数$p$が存在するならば，
+  \cref{eq:impint}の広義積分は（絶対）収束する．
+  また，半開区間$\interval{rop}{a,b}$上で定義された連続関数$f \colon \interval{rop}{a,b} \maparrow \Real$
+  について，極限
+  \begin{align}
+    \lim_{x \to b - 0} \paren{b - x}^p \absolute{\apply{f}{x}}
+    \label{eq:limimpint2}
+  \end{align}
+  が有限確定であるような$0 < p < 1$を満たす実数$p$が存在するならば，
+  \cref{eq:impint}の広義積分は（絶対）収束する．
+  さらに，無限区間$\interval{rop}{a, \infty}$上で定義された連続関数
+  $f \colon \interval{rop}{a, \infty} \maparrow \Real$に対し，
+  極限
+  \begin{align}
+    \lim_{x \to \infty} x^q \absolute{\apply{f}{x}}
+    \label{eq:limimpintinfty}
+  \end{align}
+  が有限確定であるような$q > 1$を満たす実数$q$が存在するならば，
+  \cref{eq:impintinfty}の広義積分は（絶対）収束する．
+  無限区間$\interval{lop}{- \infty, a}$で定義された連続関数$f \colon \interval{lop}{-\infty , a} \maparrow \Real$
+  に対しては，\cref{eq:limimpintinfty}を
+  \begin{align}
+    \lim_{x \to - \infty} \paren{-x}^q \absolute{\apply{f}{x}}
+    \label{eq:limintminusinfty}
+  \end{align}
+  におきかえたものに対して同様のことがいえる．
+\end{thm}
+
+
+\section{弧度法}
+
+
+三角関数論を展開する上では角度に関する議論を避けることはできない．
+ここでは，角度という概念がどのようにして特徴づけられるかには触れず，
+三角関数論の展開する上で必要最低限となる事項のみ扱う．
+
+
+\subsection{曲線とその長さ} \label{subsec:curvelength}
+
+まずは曲線とその長さについて考える．
+ややこしいと感じる読者は最後の滑らかな曲線の長さの定義以外は読み飛ばしてもかまわない．
+
+\begin{dfn} \label{dfn:curve}
+  $a,b$を$a < b$なる実数とする．
+  このとき，閉区間$\interval{c}{a,b}$から平面$\Real^2$への連続写像$\gamma \colon \interval{c}{a,b} \maparrow \Real^2$を
+  $\apply{\gamma}{a}$を\definition{始点}，$\apply{\gamma}{b}$を\definition{終点}とする（平面）\definition{曲線}という．
+  また，2つの曲線$\gamma_1 \colon \interval{c}{a,b} \maparrow \Real^2$，$\gamma_2 \colon \interval{c}{b,c} \maparrow \Real^2$
+  が$\apply{\gamma_1}{b} = \apply{\gamma_2}{b}$を満たすとき，
+  写像$\gamma \colon \interval{c}{a,c} \maparrow \Real^2$を
+  \begin{align}
+    \apply{\gamma}{t} =
+    \begin{cases}
+      \apply{\gamma_1}{t} & \text{($a \leq t \leq b$のとき)}, \\
+      \apply{\gamma_2}{t} & \text{(それ以外のとき)}
+    \end{cases}
+    \label{eq:curvesummap}
+  \end{align}
+  と定めれば，$\gamma$は曲線となる．この曲線を
+  \begin{align}
+    \gamma_1 + \gamma_2
+    \label{eq:curvesum}
+  \end{align}
+  と表す．
+\end{dfn}
+
+任意の曲線$\gamma \colon \interval{c}{a,b} \maparrow \Real^2$は，
+2つの連続関数$\varphi, \psi \colon \interval{c}{a,b} \maparrow \Real$を用いて
+\begin{align}
+  \apply{\gamma}{t} = \coord{\apply{\varphi}{t}, \apply{\psi}{t}} \quad \text{($a \leq t \leq b$)}
+  \label{eq:curvecoord}
+\end{align}
+と表すことができる．
+これを用いて曲線が滑らかであるという概念を次のように定義しよう．
+
+\begin{dfn} \label{dfn:smooth}
+  2つの連続関数$\varphi, \psi \colon \interval{c}{a,b} \maparrow \Real$を用いて
+  \cref{eq:curvecoord}で表される曲線$\gamma \colon \interval{c}{a,b} \maparrow \Real$について，
+  $\varphi, \psi$が開区間$\interval{op}{a,b}$上で微分可能であり，さらに次の条件をすべて満たすとする：
+  \begin{itemize}
+    \item $\varphi, \psi$の導関数$\varphi ', \psi ' \colon \interval{op}{a,b} \maparrow \Real$は開区間$\interval{op}{a,b}$上で連続である．
+    \item $\lim_{t \to a + 0}\apply{\varphi '}{t}$，$\lim_{t \to a + 0}\apply{\psi '}{t}$，
+      $\lim_{t \to b - 0}\apply{\varphi '}{t}$，$\lim_{t \to b - 0}\apply{\psi '}{t}$はすべて有限確定であり，
+      前者2つ，および後者2つの極限がともに0であるようなことはない．
+    \item $\apply{\varphi'}{t}, \apply{\psi'}{t}$が同時に0になる$t$は存在しない．
+  \end{itemize}
+  このとき，$\gamma$は\definition{滑らか}であるという．
+  なお，2つ目の条件によって$\varphi', \psi'$は閉区間$\interval{c}{a,b}$上の連続関数に一意に拡張できる．
+  以後，滑らかな曲線に関してはつねに各成分を連続関数として表したときの導関数が閉区間上の連続関数に拡張されているものとする．
+\end{dfn}
+
+\begin{dfn} \label{dfn:length}
+  2つの連続関数$\varphi, \psi \colon \interval{c}{a,b} \maparrow \Real$を用いて
+  \cref{eq:curvecoord}のように表される
+  滑らかな曲線$\gamma \colon \interval{c}{a,b} \maparrow \Real^2$について，積分
+  \begin{align}
+    \bigintssss_a^b \sqrt{ \apply{\varphi '}{t}^2 + \apply{\psi '}{t}^2} \intd t
+    \label{eq:length}
+  \end{align}
+  で表される実数を$\gamma$の\definition{長さ}という．
+  $\gamma$が滑らかな曲線ならば，\cref{eq:length}中の被積分関数は
+  閉区間$\interval{c}{a,b}$上で定義された連続関数であり，従って
+  \cref{eq:length}の積分は有限確定であることに注意せよ．
+  また，$\gamma$は滑らかとは限らないが，$\gamma$の定義域を開区間$\interval{op}{a,b}$の
+  部分閉区間$\interval{c}{c,d} \subset \interval{op}{a,b}$に制限して得られる
+  曲線$\gamma \restrict \interval{c}{c,d} \colon \interval{c}{c,d} \maparrow \Real^2$
+  がつねに滑らかである場合，\cref{eq:length}を広義積分とみなし，
+  その広義積分が収束すればその値を$\gamma$の長さとする．
+\end{dfn}
+
+
+\subsection{円周率と弧度法} \label{subsec:pi}
+
+
+$0 < y < 1$となる実数$y$について，$\apply{\gamma}{t} = \coord{\sqrt{1 - t^2}, t}$ ($t \in \interval{c}{0,y}$)で定められる
+写像$\gamma \colon \interval{c}{0,y} \maparrow \Real^2$は滑らかな曲線である．
+$\gamma$の像は
+\begin{align}
+  \setintension{\coord{x,u} \in \Real^2}{0 \leq u < y \land x^2 + u^2 = 1}
+  \label{eq:circle}
+\end{align}
+であるから，$\gamma$は原点中心，半径1の円周の一部を表すと解釈できる．
+そして，$\gamma$の長さは\cref{eq:length}より
+\begin{align}
+  \bigintssss_0^y \frac{\intd t}{\sqrt{1 - t^2}}
+  \label{eq:arc}
+\end{align}
+で与えられる．
+\Cref{eq:arc}で$y \to 1 - 0$とした極限は\cref{thm:impintconv}より収束し，同様にして広義積分
+\begin{align}
+  \bigintssss_{-1}^0 \frac{\intd t}{\sqrt{1 - t^2}}
+  \label{eq:arc-1}
+\end{align}
+も同じ値に収束する．そこで，円周率$\pi$を次のように定義できる．
+
+\begin{dfn} \label{dfn:pi}
+  円周率$\pi$を
+  \begin{align}
+    \pi = \bigintssss_{-1}^1 \frac{\intd t}{\sqrt{1 - t^2}}
+    \label{eq:pi}
+  \end{align}
+  と定義する．
+\end{dfn}
+
+
+\begin{lemma} \label{lemma:arc}
+  関数$\theta \colon \interval{c}{-1,1} \maparrow \interval{c}{-\frac{\pi}{2},\frac{\pi}{2}} $を
+  \begin{align}
+    \apply{\theta}{y} = \bigintssss_{0}^{y} \frac{\intd t}{\sqrt{1 - t^2}} \quad \text{($y \in \interval{c}{-1,1}$)}
+    \label{eq:theta}
+  \end{align}
+  と定義する．このとき，$\theta$は狭義単調増加関数である，すなわち，$y_1 < y_2$なる任意の
+  $y_1, y_2 \in \interval{c}{-1,1}$に対して$\apply{\theta}{y_1} < \apply{\theta}{y_2}$が成り立つ．
+\end{lemma}
+
+\begin{proof}
+  $y_1 < y_2$なる任意の$y_1, y_2 \in \interval{c}{-1,1}$に対して
+  \begin{align*}
+    \apply{\theta}{y_2} - \apply{\theta}{y_1} = \bigintssss_{y_1}^{y_2} \frac{\intd t}{\sqrt{1 - t^2}} > 0 \text{．}
+  \end{align*}
+  従って$\apply{\theta}{y_1} < \apply{\theta}{y_2}$．
+\end{proof}
+
+
+$\theta$は連続関数であり，かつ$\apply{\theta}{1} = \frac{\pi}{2}$，$\apply{\theta}{-1} = - \frac{\pi}{2}$であるから，
+中間値の定理によって$\theta$が前者であることがわかる．
+また，\cref{lemma:arc}によって単射であることもわかる．ゆえに中間値の定理を適用することで
+$\theta$が全単射であることがわかる．
+
+原点を通る任意の直線に対し，その直線は半円$\setintension{\coord{x,y}}{-1 \leq y < 1 \land x^2 + y^2 = 1}$との
+交点の座標（これはただ1つ存在する）を$\coord{x,y}$として
+実数$\apply{\theta}{y} + \frac{\pi}{2}$を対応させることにより，
+原点を通る直線全体の集合から半開区間$\interval{rop}{0,\pi}$への全単射が定義できる．
+この全単射によって対応する実数ははまさしくその角の「角度」と呼ぶにふさわしいものである%
+\footnote{%
+  まだ合同不変性や加法性が示されてはいないので少し気が早いし，
+  そもそもまだ任意の角に対して実数が対応させれてはいない．
+  しかし，ここでは角度に関して詳細に研究したいわけではないのでこれ以上は深入りしないこととする．
+}%
+．このようにして角に対して（非負の）実数を対応させることによって角度を定義する手法を
+\definition{弧度法}という．
+
+
+\section{三角関数} \label{sec:sincostan}
+
+\subsection{定義とその幾何学的解釈} \label{subsec:dfngeo}
+
+\Cref{eq:theta}で定義される関数$\theta \colon \interval{c}{-1,1} \maparrow \interval{c}{- \frac{\pi}{2}, \frac{\pi}{2}}$が
+全単射であることはすでに述べた．従ってその逆関数が定義できる．
+
+\begin{dfn} \label{dfn:sin}
+  \Cref{eq:theta}で定義される関数
+  $\theta \colon \interval{c}{-1,1} \maparrow \interval{c}{- \frac{\pi}{2}, \frac{\pi}{2}}$
+  の逆関数を
+  \begin{align}
+    \sin \colon \interval{c}{- \frac{\pi}{2}, \frac{\pi}{2}} \maparrow \interval{c}{-1,1}
+    \label{eq:sin}
+  \end{align}
+  と表す．
+  また，$n \in \Zahlen$に対する等式
+  \begin{align}
+    \apply{\sin}{x + n \pi} = \paren{-1}^n \apply{\sin}{x} \quad \text{($\textstyle x \in \interval{c}{-\frac{\pi}{2}, \frac{\pi}{2}}$)}
+    \label{eq;sinperiod}
+  \end{align}
+  によってこの関数$\sin$の定義域を実数全体へと拡張する．
+  $x \in \Real$に対する$\apply{\sin}{x}$は通常$\sin x$と略記される．
+\end{dfn}
+
+上記の議論とまったく同様にして$\cos$も定義できる．
+$0 < x < 1$なる実数$x$について，
+曲線$\gamma \colon \interval{c}{x,1} \maparrow \Real^2$を
+$\apply{\gamma}{t} = \coord{t, \sqrt{1 - t^2}}$ ($t \in \interval{c}{x,1}$)
+と定めたとき，
+$\gamma$の長さは
+\begin{align}
+  \bigintssss_x^1 \frac{\intd t}{\sqrt{1 - t^2}}
+  \label{eq:arcx}
+\end{align}
+で与えられる．
+この積分が\cref{eq:arc}に対応する．
+
+\begin{dfn} \label{dfn:cos}
+  関数$\theta \colon \interval{c}{-1, 1} \maparrow \interval{c}{0,\pi}$を
+  \begin{align}
+    \apply{\theta}{x} = \bigintssss_x^1 \frac{\intd t}{\sqrt{1 - t^2}} \quad \text{($x \in \interval{c}{-1,1}$)}
+    \label{eq:arcx}
+  \end{align}
+  は狭義単調減少連続関数で，$\apply{\theta}{-1} = \pi$，$\apply{\theta}{1} = 0$だから全単射である．その逆関数を
+  \begin{align}
+    \cos \colon \interval{c}{0, \pi} \maparrow \interval{c}{-1,1}
+    \label{eq:cos}
+  \end{align}
+  と表し，$n \in \Zahlen$に対する等式
+  \begin{align}
+    \apply{\cos}{x + n \pi} = \paren{-1}^n \apply{\cos}{x} \quad \text{($\textstyle x \in \interval{c}{-\frac{\pi}{2}, \frac{\pi}{2}}$)}
+    \label{eq:cosperiod}
+  \end{align}
+  によってこの関数$\cos$の定義域を実数全体へと拡張する．$x \in \Real$に対する$\apply{\cos}{x}$は$\cos x$と略記することが多い．
+\end{dfn}
+
+最後に$\tan$を定義しよう．実数$m$に対し，直線$y = mx$と円$x^2 + y^2 = 1$の交点は2点
+\begin{align}
+  \coord{\frac{1}{\sqrt{1 + m^2}}, \frac{m}{\sqrt{1 + m^2}}},
+  \coord{- \frac{1}{\sqrt{1 + m^2}}, - \frac{m}{\sqrt{1 + m^2}}}
+  \label{eq:crosspoint}
+\end{align}
+である．
+また，$C = \setintension{\coord{x,y}}{x > 0 \land x^2 + y^2 = 1}$とおき，
+写像$\gamma_0 \colon \Real \maparrow C$を
+$\apply{\gamma_0}{t} = \coord{\frac{1}{\sqrt{1 + t^2}}, \frac{t}{\sqrt{1 + t^2}}}$ ($t \in \Real$)
+と定めれば，$\gamma_0$は全単射連続写像となる．$m > 0$の場合，
+曲線$\gamma \colon \interval{c}{0,m} \maparrow \Real^2$を$\apply{\gamma}{t} = \apply{\gamma_0}{t}$ ($t \in \interval{c}{0,m}$)
+は滑らかで，その長さは少しの計算で
+\begin{align}
+  \bigintssss_0^m \frac{\intd t}{1 + t^2}
+  \label{eq:arctan}
+\end{align}
+となることもわかる．ところで，$\gamma$の像は
+\[
+  \setintension{\coord{x,y} \in \Real^2}{0 \leq y \leq \frac{m}{\sqrt{1 + m^2}} \land x^2 + y^2 = 1}
+\]
+であるから，\cref{eq:arc}も考えれば
+\begin{align}
+  \bigintssss_0^m \frac{\intd t}{1 + t^2} = \bigintssss_0^{\frac{m}{\sqrt{1 + m^2}}} \frac{\intd t}{\sqrt{1 - t^2}}
+  \label{eq:angle}
+\end{align}
+が成り立つ．このことは簡単な置換積分によっても確かめられる．
+$m \to \infty$とすると，$\frac{m}{\sqrt{1 + m^2}} \to 1$だから，
+関数
+\[
+  \interval{op}{0,\infty} \ni m \mapsto \bigintssss_0^{\frac{m}{\sqrt{1 + m^2}}} \frac{\intd t}{\sqrt{1 - t^2}} \in \Real
+\]
+が連続関数であることもあわせて
+\begin{align}
+  \bigintssss_0^{\infty} \frac{\intd t}{1 + t^2} = \bigintssss_0^1 \frac{\intd t}{\sqrt{1 - t^2}} = \frac{\pi}{2}
+  \label{eq:piint}
+\end{align}
+を得る．
+まったく同様の議論により，
+\begin{align}
+  \bigintssss_{-\infty}^0 \frac{\intd t}{1 + t^2} = \frac{\pi}{2}
+  \label{eq:piint2}
+\end{align}
+も得られる．このことと関数
+\begin{align*}
+  \Real \ni m \mapsto \bigintssss_0^m \frac{\intd t}{1 + t^2}
+\end{align*}
+が狭義単調増加連続関数であることも考えれば，
+関数$\theta \colon \Real \maparrow \interval{op}{-\frac{\pi}{2}, \frac{\pi}{2}}$を
+\begin{align}
+  \apply{\theta}{m} = \bigintssss_0^m \frac{\intd t}{1 + t^2} \quad \text{($m \in \Real$)}
+  \label{eq:arctan}
+\end{align}
+と定義でき，しかも$\theta$は狭義単調増加関数で，従って全単射であることもわかる．
+
+以上のことに注意して，関数$\tan$を定義しよう．
+
+
+\begin{dfn} \label{dfn:tan}
+  \Cref{eq:arctan}で定義される関数$\theta \colon \Real \maparrow \interval{op}{- \frac{\pi}{2}, \frac{\pi}{2}}$
+  の逆関数を
+  \begin{align}
+    \tan \colon \interval{op}{- \frac{\pi}{2}, \frac{\pi}{2}} \maparrow \Real
+    \label{eq:tan}
+  \end{align}
+  と定める．また，$n \in \Zahlen$に対する等式
+  \begin{align}
+    \apply{\tan}{x + n \pi} = \apply{\tan}{x} \quad \text{($\textstyle x \in \interval{op}{- \frac{\pi}{2}, \frac{\pi}{2}}$)}
+    \label{eq:tanperiod}
+  \end{align}
+  によって$\tan$の定義域を$\Real \setminus \paren{\frac{\pi}{2}}\Zahlen$上に拡張する．
+  ただし，
+  \begin{align}
+    \Real \setminus \paren{\frac{\pi}{2}} \Zahlen
+    = \setintension{x \in \Real}{\forall n \in \Zahlen \paren{x \neq \frac{\pi}{2} n}}
+    \label{eq:tandomain}
+  \end{align}
+  である．なお，$x \in \Real \setminus \paren{\frac{\pi}{2}} \Zahlen$に対する
+  $\apply{\tan}{x}$はやはり$\tan x$と略記することが多い．
+\end{dfn}
+
+
+
+
+
+
+\end{document}
