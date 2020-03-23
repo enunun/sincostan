@@ -12,6 +12,8 @@
 \usepackage{diffcoeff}
 \usepackage{bigints}
 \usepackage[margin=25mm,truedimen]{geometry}
+\usepackage[labelsep=space]{caption}
+\usepackage{subcaption}
 %
 %
 %
@@ -25,7 +27,7 @@
 \newcommand*{\coord}[1]{\paren{#1}}
 \newcommand*{\maparrow}{\rightarrow}
 \newcommand*{\intd}{\dl2}
-\newcommand*{\restrict}{\upharpoonleft}
+\newcommand*{\restrict}{\upharpoonright}
 \newcommand*{\image}[2]{#1 \sqbracket*{#2}}
 \newcommand*{\inv}[1]{{#1}^{-1}}
 \delimitershortfall = -0.5pt
@@ -37,6 +39,10 @@
 \crefname{que}{問}{問}
 \crefname{ans}{解答}{解答}
 \crefname{lemma}{補題}{補題}
+\crefname{dfn}{定義}{定義}
+
+\newcommand\crefrangeconjunction{--}
+\newcommand\crefpairconjunction{, }
 %
 %
 \theoremstyle{definition}
@@ -72,11 +78,13 @@ itemindent = \parindent
 \begin{abstract}
   「高校の数学Ⅲの教科書における$\lim_{x \to 0} \frac{\sin x}{x} = 1$の証明は循環論法である」
   という主張は受験業界でたびたび耳にする．そして，「循環論法を回避する方法」として，無限級数や微分方程式を用いた
-  やや高度な前提知識を要するもの，あるいは高度な前提知識こそ不要であるが直感的でないもの
+  やや高度な前提知識を要するもの，あるいは高度な前提知識こそ不要であるが直感的でないため
+  高校の教科書に載っている三角関数の同等の概念を扱っていることが明瞭でないもの
   が提示されることもある．本稿では，「（実数の範囲での）三角関数論は高校の教科書に載っている事項
-  （および積分に関する基本事項）のみで厳密に展開することができ，
+  と積分に関する基本事項のみで厳密に展開することができ，
   かつ高校の教科書での議論の展開の仕方を大きく修正する必要はない」ということを実例でもって示す．
-  なお，本稿で提示する内容は筆者オリジナルのものではなく，インターネット上に断片的に存在する情報をまとめ上げたのみである．
+  なお，本稿で提示する内容は筆者オリジナルのものではなく，インターネット上に断片的に存在する情報をまとめ上げ，必要に応じて
+  解説を付け加えたものである．
 \end{abstract}
 
 
@@ -109,11 +117,11 @@ itemindent = \parindent
 
 三角関数が曲線の長さや逆関数を用いて記述される以上，
 実数の連続性に関する議論を避けることはできない．
-ここでは，その中でも特に重要なものを証明抜きで列挙する．
+ここでは，特に強調しておくべき性質を証明抜きで列挙する．
 
 
 \begin{thm} \label{thm:invderi}
-  関数$s \colon X \maparrow Y$は全単射で，かつ$X$上で微分可能であるとする．
+  関数$f \colon X \maparrow Y$は全単射で，かつ$X$上で微分可能であるとする．
   このとき，任意の$x \in X$に対して$\apply{f'}{x} \neq 0$であるならば，
   $f$の逆関数$\inv{f} \colon Y \maparrow X$は$Y = \image{f}{X}$上の
   各点$b = \apply{f}{a}$ ($a \in X$)で微分可能であって，
@@ -142,7 +150,7 @@ itemindent = \parindent
 \end{thm}
 
 \begin{thm}[微分積分学の基本定理] \label{thm:int}
-  閉区間$\interval{c}{a,b}$上で定義された連続関数$f \colon \interval{c}{a,b}$
+  閉区間$\interval{c}{a,b}$上で定義された連続関数$f \colon \interval{c}{a,b} \maparrow \Real$
   の定積分
   \begin{align}
     \int_a^b \apply{f}{x} \intd x
@@ -353,6 +361,7 @@ $\gamma$の像は
   と定義する．
 \end{dfn}
 
+ここで定義した円周率は半径1の円の周の長さの半分を表していることはいうまでもないだろう．
 
 \begin{lemma} \label{lemma:arc}
   関数$\theta \colon \interval{c}{-1,1} \maparrow \interval{c}{-\frac{\pi}{2},\frac{\pi}{2}} $を
@@ -374,15 +383,15 @@ $\gamma$の像は
 
 
 $\theta$は連続関数であり，かつ$\apply{\theta}{1} = \frac{\pi}{2}$，$\apply{\theta}{-1} = - \frac{\pi}{2}$であるから，
-中間値の定理によって$\theta$が前者であることがわかる．
-また，\cref{lemma:arc}によって単射であることもわかる．ゆえに中間値の定理を適用することで
-$\theta$が全単射であることがわかる．
+\cref{thm:image}によって$\theta$が全射であることがわかる．
+また，\cref{lemma:arc}によって単射であることもわかる．ゆえに
+$\theta$が全単射である．
 
-原点を通る任意の直線に対し，その直線は半円$\setintension{\coord{x,y}}{-1 \leq y < 1 \land x^2 + y^2 = 1}$との
+原点を通る任意の直線に対し，その直線と半円$\setintension{\coord{x,y}}{-1 < y \leq 1 \land x^2 + y^2 = 1}$との
 交点の座標（これはただ1つ存在する）を$\coord{x,y}$として
-実数$\apply{\theta}{y} + \frac{\pi}{2}$を対応させることにより，
-原点を通る直線全体の集合から半開区間$\interval{rop}{0,\pi}$への全単射が定義できる．
-この全単射によって対応する実数ははまさしくその角の「角度」と呼ぶにふさわしいものである%
+実数$\apply{\theta}{y}$を対応させることにより，
+原点を通る直線全体の集合から半開区間$\interval{lop}{-\frac{\pi}{2},\frac{\pi}{2}}$への全単射が定義できる．
+この全単射によって原点を通るある直線に対応する実数は，その直線と$x$軸がなす「角度」と呼ぶにふさわしいものである%
 \footnote{%
   まだ合同不変性や加法性が示されてはいないので少し気が早いし，
   そもそもまだ任意の角に対して実数が対応させれてはいない．
@@ -408,10 +417,18 @@ $\theta$が全単射であることがわかる．
     \label{eq:sin}
   \end{align}
   と表す．
+  ここでの関数$\theta$は$\sin$の逆関数であることを意識して
+  \begin{align}
+    \arcsin,
+    \label{eq:arcsin} \\
+    \inv{\sin}
+    \label{eq:invsin}
+  \end{align}
+  などと表記されることがある．
   また，$n \in \Zahlen$に対する等式
   \begin{align}
     \apply{\sin}{x + n \pi} = \paren{-1}^n \apply{\sin}{x} \quad \text{($\textstyle x \in \interval{c}{-\frac{\pi}{2}, \frac{\pi}{2}}$)}
-    \label{eq;sinperiod}
+    \label{eq:sinperiod}
   \end{align}
   によってこの関数$\sin$の定義域を実数全体へと拡張する．
   $x \in \Real$に対する$\apply{\sin}{x}$は通常$\sin x$と略記される．
@@ -436,14 +453,22 @@ $\gamma$の長さは
     \apply{\theta}{x} = \bigintssss_x^1 \frac{\intd t}{\sqrt{1 - t^2}} \quad \text{($x \in \interval{c}{-1,1}$)}
     \label{eq:arcx}
   \end{align}
-  は狭義単調減少連続関数で，$\apply{\theta}{-1} = \pi$，$\apply{\theta}{1} = 0$だから全単射である．その逆関数を
+  と定めれば，$\theta$は狭義単調減少連続関数で，$\apply{\theta}{-1} = \pi$，$\apply{\theta}{1} = 0$だから全単射である．その逆関数を
   \begin{align}
     \cos \colon \interval{c}{0, \pi} \maparrow \interval{c}{-1,1}
     \label{eq:cos}
   \end{align}
-  と表し，$n \in \Zahlen$に対する等式
+  と表す．ここでの関数$\theta$も$\cos$の逆関数であることを意識して
   \begin{align}
-    \apply{\cos}{x + n \pi} = \paren{-1}^n \apply{\cos}{x} \quad \text{($\textstyle x \in \interval{c}{-\frac{\pi}{2}, \frac{\pi}{2}}$)}
+    \arccos,
+    \label{eq:arccos} \\
+    \inv{\cos}
+    \label{eq:invcos}
+  \end{align}
+  などと表されることが多い．
+  また，$n \in \Zahlen$に対する等式
+  \begin{align}
+    \apply{\cos}{x + n \pi} = \paren{-1}^n \apply{\cos}{x} \quad \text{($\textstyle x \in \interval{c}{0, \pi}$)}
     \label{eq:cosperiod}
   \end{align}
   によってこの関数$\cos$の定義域を実数全体へと拡張する．$x \in \Real$に対する$\apply{\cos}{x}$は$\cos x$と略記することが多い．
@@ -461,7 +486,7 @@ $\gamma$の長さは
 $\apply{\gamma_0}{t} = \coord{\frac{1}{\sqrt{1 + t^2}}, \frac{t}{\sqrt{1 + t^2}}}$ ($t \in \Real$)
 と定めれば，$\gamma_0$は全単射連続写像となる．$m > 0$の場合，
 曲線$\gamma \colon \interval{c}{0,m} \maparrow \Real^2$を$\apply{\gamma}{t} = \apply{\gamma_0}{t}$ ($t \in \interval{c}{0,m}$)
-は滑らかで，その長さは少しの計算で
+と定めれば$\gamma$は滑らかで，その長さは少しの計算で
 \begin{align}
   \bigintssss_0^m \frac{\intd t}{1 + t^2}
   \label{eq:arctan}
@@ -476,7 +501,7 @@ $\apply{\gamma_0}{t} = \coord{\frac{1}{\sqrt{1 + t^2}}, \frac{t}{\sqrt{1 + t^2}}
   \label{eq:angle}
 \end{align}
 が成り立つ．このことは簡単な置換積分によっても確かめられる．
-$m \to \infty$とすると，$\frac{m}{\sqrt{1 + m^2}} \to 1$だから，
+$m \to \infty$とすると，$\frac{m}{\sqrt{1 + m^2}} \to 1$だから
 関数
 \[
   \interval{op}{0,\infty} \ni m \mapsto \bigintssss_0^{\frac{m}{\sqrt{1 + m^2}}} \frac{\intd t}{\sqrt{1 - t^2}} \in \Real
@@ -494,7 +519,7 @@ $m \to \infty$とすると，$\frac{m}{\sqrt{1 + m^2}} \to 1$だから，
 \end{align}
 も得られる．このことと関数
 \begin{align*}
-  \Real \ni m \mapsto \bigintssss_0^m \frac{\intd t}{1 + t^2}
+  \Real \ni m \mapsto \bigintssss_0^m \frac{\intd t}{1 + t^2} \in \Real
 \end{align*}
 が狭義単調増加連続関数であることも考えれば，
 関数$\theta \colon \Real \maparrow \interval{op}{-\frac{\pi}{2}, \frac{\pi}{2}}$を
@@ -502,7 +527,7 @@ $m \to \infty$とすると，$\frac{m}{\sqrt{1 + m^2}} \to 1$だから，
   \apply{\theta}{m} = \bigintssss_0^m \frac{\intd t}{1 + t^2} \quad \text{($m \in \Real$)}
   \label{eq:arctan}
 \end{align}
-と定義でき，しかも$\theta$は狭義単調増加関数で，従って全単射であることもわかる．
+と定義でき，しかも$\theta$は狭義単調増加連続関数で，全単射であることもわかる．
 
 以上のことに注意して，関数$\tan$を定義しよう．
 
@@ -514,7 +539,15 @@ $m \to \infty$とすると，$\frac{m}{\sqrt{1 + m^2}} \to 1$だから，
     \tan \colon \interval{op}{- \frac{\pi}{2}, \frac{\pi}{2}} \maparrow \Real
     \label{eq:tan}
   \end{align}
-  と定める．また，$n \in \Zahlen$に対する等式
+  と定める．上の関数$\theta$はやはり$\tan$の逆関数であることを意識して
+  \begin{align}
+    \arctan,
+    \label{eq:arctan} \\
+    \inv{\tan}
+    \label{eq:invtan}
+  \end{align}
+  と表すことが多い．
+  また，$n \in \Zahlen$に対する等式
   \begin{align}
     \apply{\tan}{x + n \pi} = \apply{\tan}{x} \quad \text{($\textstyle x \in \interval{op}{- \frac{\pi}{2}, \frac{\pi}{2}}$)}
     \label{eq:tanperiod}
@@ -532,6 +565,79 @@ $m \to \infty$とすると，$\frac{m}{\sqrt{1 + m^2}} \to 1$だから，
 
 
 
+\Cref{dfn:sin,dfn:cos,dfn:tan}で述べた$\sin , \cos, \tan$を総称して
+\definition{三角関数}という．
+以上で述べた三角関数の定義は高校の教科書に載っている定義を精密化したものになっている．
+このことを確かめる前に，先に三角関数の周期性について議論しておこう．
+
+\begin{lemma} \label{lemma:period}
+  任意の実数$x$に対して$\apply{\sin}{x + p} = \sin x$，$\apply{\cos}{x + p} = \cos x$，$\apply{\tan}{x + p} = \tan x$
+  を満たす実数$p$に正で最小のものがそれぞれについて存在する．
+  そしてその値はそれぞれ$2 \pi, 2 \pi, \pi$である．
+\end{lemma}
+
+\begin{proof}
+  まずは$\sin$について考えよう．
+  まず，$0 < x < \pi$のときには$\sin x > 0$となることに注意しよう．
+  実際，$0 < x \leq \frac{\pi}{2}$のときには\cref{eq:theta}
+  における$\theta$について，$x = \apply{\theta}{y}$となる$y \in \interval{lop}{0,1}$が存在し，
+  $\frac{\pi}{2} < x < \pi$のときには$\apply{\sin}{x} = - \sin t$かつ$\apply{\theta}{y} = t$となる
+  $t \in \interval{op}{- \frac{\pi}{2}, 0}$と$y \in \interval{op}{-1, 0}$が存在するからである．
+  同様にして$\pi < x < 2 \pi$のときには$\sin x < 0$であることがいえる．
+  さらに，$\sin 0 = \sin \pi = \sin 2 \pi = 0$であることもすぐにわかる．
+  
+  さて，正の実数$p$が任意の実数$x$に対して$\apply{\sin}{x + p} = \sin x$を満たすとしよう．
+  もし$p \leq \pi$であるならば，$x = \pi - \frac{p}{2}$とおくと$0 \leq \pi - p < x < \pi$であって
+  $\sin x \geq 0$であるが$\apply{\sin}{x + p} = \apply{\sin}{\pi + \frac{p}{2}}$で
+  $\pi < \pi + \frac{p}{2} < 2 \pi$より$\apply{\sin}{x + p} < 0$だから
+  $\apply{\sin}{x + p} = \sin x$は成り立たず不合理．従って$p > \pi$でなければならない．
+  また$\pi < p < 2 \pi$も成り立たない．
+  実際，$\pi < p < 2 \pi$であるとすれば，$x = 2 \pi - p$とおくと$0 < x < \pi$であって
+  $\sin x > 0$であるが$\apply{\sin}{x + p} = \sin 2 \pi = 0$より$\apply{\sin}{x + p} = \sin x$
+  は成り立たない．ゆえに$p \geq 2 \pi$であることがわかった．
+  任意の実数$x$に対して$\apply{\sin}{x + 2 \pi} = \sin x$が成り立つことは\cref{eq:sinperiod}より明らかであるから，
+  任意の実数$x$に対して$\apply{\sin}{x + p} = \sin x$を満たす正で最小の実数$p$は存在し，
+  その値は$2 \pi$である．
+  $\cos, \tan$に関しても同様に示すことができる．
+\end{proof}
+
+三角関数の周期性について議論したところで，\cref{dfn:sin,dfn:cos,dfn:tan}が高校の教科書に載っている
+三角関数の定義を精密化したものになっていることを確認しよう．
+
+まずは\cref{dfn:sin}について考えよう．
+原点を中心とする半径1の円上に$A = \coord{1,0}$，$P = \coord{x,y}$をとれば，
+$P$が第1象限上の点である場合には\cref{eq:theta}における$\apply{\theta}{y}$
+は\cref{fig:circleposi}の太線部の長さである．
+また，$P$が第4象限上の点である場合には\cref{eq:theta}における
+$\apply{\theta}{y}$は負であり，
+その絶対値は\cref{fig:circlenega}の太線部の長さである．
+このことは「$\apply{\theta}{y}$は弧$AP$の（反時計回りを正とした）符号付き長さである」と言い表すことが多い．
+もちろん，$P = A$である場合は$\apply{\theta}{y} = 0$であり，$P = \coord{0, 1}, \coord{0, -1}$
+である場合にはそれぞれ$\apply{\theta}{y} = \frac{\pi}{2}, - \frac{\pi}{2}$であるから，
+やはり$\apply{\theta}{y}$は
+弧$AP$の符号付き長さである．
+さて，ここでの関数$\theta$は原点を中心とする半径1の円の右半分上に与えられた点$P$の$y$座標に対して弧$AP$
+の長さ，すなわち半直線$OP$
+と$x$軸の正の向きのなす角を対応させる関数だったから，ここでの$\apply{\sin}{\apply{\theta}{y}}$は
+上記の$\apply{\theta}{y}$に対して$P$の$y$座標を表すことになる．
+
+\begin{figure}[htbp]
+  \begin{minipage}{.45\linewidth}
+    \centering
+    \includegraphics[width=60mm]{fig/circle.pdf}
+    \subcaption{$P$が第1象限上の点の場合}
+    \label{fig:circleposi}
+  \end{minipage}
+  \begin{minipage}{.45\linewidth}
+    \centering
+    \includegraphics[width=60mm]{fig/circlenega.pdf}
+    \subcaption{$P$が第4象限上の点の場合}
+    \label{fig:circlenega}
+  \end{minipage}
+  \caption{$P$が第$1,4$象限上の点のときの\cref{dfn:sin}の幾何学的解釈，
+  図の太線の部分の符号付き長さが$\apply{\theta}{y}$であり，$\apply{\sin}{\apply{\theta}{y}}$は$y$座標である．}
+  \label{fig:circle}
+\end{figure}
 
 
 
