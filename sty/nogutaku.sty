@@ -53,7 +53,7 @@
 \ProvideDocumentCommand\floor{m}{\left \lfloor #1 \right \rfloor}
 
 \ProvideDocumentCommand\apply{s m m}{%
-  \IfBooleanTF{#1}{#2 #3}{{#2}\paren*{#3}}%
+  \IfBooleanTF{#1}{#2 #3}{#2\paren*{#3}}%
 }
 
 \ProvideDocumentCommand\setextension{m}{\braces{#1}}
