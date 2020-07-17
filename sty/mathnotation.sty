@@ -1,20 +1,20 @@
-\ProvidesPackage{nogutaku}[2020/01/22 v0.2]
-\RequirePackage{amsmath,braket,mleftright,ifthen,bm}
-\RequirePackage{xparse,xfrac}
+\ProvidesPackage{mathnotation}[2020/05/31 v0.3]
+\RequirePackage{amsmath,braket,mleftright,ifthen}
+\RequirePackage{xparse}
 
 \NewDocumentCommand\setfraction{}{%
-  \DeclareDocumentCommand\nogu@frac@d{m m}{%
+  \DeclareDocumentCommand\mathnote@frac@d{m m}{%
     \displaystyle{%
     \genfrac{}{}{}{}{\raisebox{-.44ex} {$\,##1\,$}} {\raisebox{.1ex}{$\,##2\,$}} }%
   }%
-  \DeclareDocumentCommand\nogu@frac@t{m O{} m}{%
-    \textstyle{{##1}{##2 /}{##3}}%
+  \DeclareDocumentCommand\mathnote@frac@t{m m}{%
+    \textstyle{{##1}{/}{##2}}%
   }%
-  \DeclareDocumentCommand\nogu@frac@s{m O{} m}{\scriptstyle{##1}{##2 /}{##3}}
-  \DeclareDocumentCommand\nogu@frac@ss{m O{} m}{\scriptscriptstyle{##1}{##2 /}{##3}}
+  \DeclareDocumentCommand\mathnote@frac@s{m m}{\scriptstyle{##1}{/}{##2}}
+  \DeclareDocumentCommand\mathnote@frac@ss{m m}{\scriptscriptstyle{##1}{/}{##2}}
   %
-  \DeclareDocumentCommand\frac{m O{} m}{%
-    \mathchoice{\nogu@frac@d{##1}{##3}}{\nogu@frac@t{##1}[##2]{##3}}{\nogu@frac@s{##1}[##2]{##3}}{\nogu@frac@ss{##1}[##2]{##3}}%
+  \DeclareDocumentCommand\frac{m m}{%
+    \mathchoice{\mathnote@frac@d{##1}{##2}}{\mathnote@frac@t{##1}{##2}}{\mathnote@frac@s{##1}{##2}}{\mathnote@frac@ss{##1}{##2}}%
   }%
 }
 

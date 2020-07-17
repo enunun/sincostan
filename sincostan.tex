@@ -2,18 +2,19 @@
 \usepackage{luatexja-fontspec}
 \usepackage{amsthm}
 \usepackage{enumitem}
-\usepackage{sty/nogutaku}
+\usepackage{sty/mathnotation}
 %\usepackage{unicode-math}
 %\setmathfont{Latin Modern Math}
-\usepackage{amssymb}
+\usepackage{amsmath,amssymb}
 \usepackage[colorlinks=true,unicode,linkbordercolor={0 0 0}]{hyperref}
 \usepackage{cleveref}
 \usepackage{authblk}
 \usepackage{diffcoeff}
 \usepackage{bigints}
 \usepackage[margin=25mm,truedimen]{geometry}
-\usepackage[labelsep=space]{caption}
+\usepackage[labelsep=quad]{caption}
 \usepackage{subcaption}
+\usepackage{graphicx}
 %
 %
 %
@@ -97,26 +98,26 @@ itemindent = \parindent
 
 \begin{itemize}
   \item 点を表す記号は高校の教科書ではローマン体で$\mathrm{A}, \mathrm{B}, \dotsc$のように
-    書かれることが多いが，この記事では通常の変数と同じく$A,B, \dotsc$のようにイタリック体で表記する．
+        書かれることが多いが，この記事では通常の変数と同じく$A,B, \dotsc$のようにイタリック体で表記する．
   \item 集合$S$と条件$\varphi$に対し，$\varphi$を満たす$S$の元全体の集合を$\setintension{x \in S}{\apply{\varphi}{x}}$と表す．
   \item 実数全体の集合を$\Real$で，（ユークリッド）平面を$\Real ^2$でそれぞれ表す．
-    $x \in \Real$は$x$が実数であることを，$P \in \Real ^2$は$P$が平面上の点であることをそれぞれ表す．
+        $x \in \Real$は$x$が実数であることを，$P \in \Real ^2$は$P$が平面上の点であることをそれぞれ表す．
   \item 「座標が$\coord{a,b}$であるような点$P$」を
-    この記事では「$P = \coord{a,b}$」と表すこととする．
+        この記事では「$P = \coord{a,b}$」と表すこととする．
   \item $x < y$または$x = y$であることを表す不等号として$x \leq y$を用いる．
   \item 実数の連続性に起因する関数や広義積分の性質に関しては深入りしない．これらに関しては初等的な微分積分学の教科書を参照せよ．
   \item 集合に関する基本的な記法や性質は既知とする．
   \item 2つの集合$X,Y$に対し，$f$が$X$から$Y$への写像であることを$f \colon X \to Y$と表す．
-    写像は関数を拡張した概念だと思えばよい．
+        写像は関数を拡張した概念だと思えばよい．
   \item 集合$X, Y$に対し，$x \in X$を$y \in Y$に対応させる写像を$X \ni x \mapsto y \in Y$と表す．
-    $f \colon X \to Y$は$f$が$X$から$Y$への写像であるという主張を表す記号列であったが，
-    $X \ni x \mapsto y \in Y$は写像そのものを表す記号列であることに注意せよ．
+        $f \colon X \to Y$は$f$が$X$から$Y$への写像であるという主張を表す記号列であったが，
+        $X \ni x \mapsto y \in Y$は写像そのものを表す記号列であることに注意せよ．
   \item 集合$A,B$に対し，$A$に属するが$B$に属さない元全体の集合を$A \setminus B$と表す．
-    すなわち，$A \setminus B = \setintension{x \in A}{x \notin B}$である．
+        すなわち，$A \setminus B = \setintension{x \in A}{x \notin B}$である．
   \item 写像$f \colon X \to Y$に対し，集合$\setintension{\apply{f}{x} \in Y}{x \in X}$を$\image{f}{X}$と表す．
-    $f$が関数のときには$\image{f}{X}$は$f$の値域と呼ばれることが多い．
+        $f$が関数のときには$\image{f}{X}$は$f$の値域と呼ばれることが多い．
   \item 実数$a$と正の実数$\delta$に対し，開区間$\interval{op}{a - \delta, a + \delta}$を
-    $a$の$\delta$近傍といい，$\neighbourfood{a}{\delta}$と表す．
+        $a$の$\delta$近傍といい，$\neighbourfood{a}{\delta}$と表す．
 \end{itemize}
 
 \subsection{微分積分学からの準備} \label{subsec:calculus}
@@ -300,8 +301,8 @@ itemindent = \parindent
   \begin{itemize}
     \item $\varphi, \psi$の導関数$\varphi ', \psi ' \colon \interval{op}{a,b} \to \Real$は開区間$\interval{op}{a,b}$上で連続である．
     \item $\lim_{t \to a + 0}\apply{\varphi '}{t}$，$\lim_{t \to a + 0}\apply{\psi '}{t}$，
-      $\lim_{t \to b - 0}\apply{\varphi '}{t}$，$\lim_{t \to b - 0}\apply{\psi '}{t}$はすべて有限確定であり，
-      前者2つ，および後者2つの極限がともに0であるようなことはない．
+          $\lim_{t \to b - 0}\apply{\varphi '}{t}$，$\lim_{t \to b - 0}\apply{\psi '}{t}$はすべて有限確定であり，
+          前者2つ，および後者2つの極限がともに0であるようなことはない．
     \item $\apply{\varphi'}{t}, \apply{\psi'}{t}$が同時に0になる$t$は存在しない．
   \end{itemize}
   このとき，$\gamma$は\definition{滑らか}であるという．
@@ -586,7 +587,7 @@ $m \to \infty$とすると，$\frac{m}{\sqrt{1 + m^2}} \to 1$だから
   $t \in \interval{op}{- \frac{\pi}{2}, 0}$と$y \in \interval{op}{-1, 0}$が存在するからである．
   同様にして$\pi < x < 2 \pi$のときには$\sin x < 0$であることがいえる．
   さらに，$\sin 0 = \sin \pi = \sin 2 \pi = 0$であることもすぐにわかる．
-  
+
   さて，正の実数$p$が任意の実数$x$に対して$\apply{\sin}{x + p} = \sin x$を満たすとしよう．
   もし$p \leq \pi$であるならば，$x = \pi - \frac{p}{2}$とおくと$0 \leq \pi - p < x < \pi$であって
   $\sin x \geq 0$であるが$\apply{\sin}{x + p} = \apply{\sin}{\pi + \frac{p}{2}}$で
@@ -636,7 +637,7 @@ $\apply{\theta}{y}$は負であり，
     \label{fig:circlenega}
   \end{minipage}
   \caption{$P$が第$1,4$象限上の点のときの\cref{dfn:sin}の幾何学的解釈，
-  図の太線の部分の符号付き長さが$\apply{\theta}{y}$であり，$\apply{\sin}{\apply{\theta}{y}}$は$y$座標である．}
+    図の太線の部分の符号付き長さが$\apply{\theta}{y}$であり，$\apply{\sin}{\apply{\theta}{y}}$は$y$座標である．}
   \label{fig:circle}
 \end{figure}
 
@@ -665,7 +666,7 @@ $\apply{\theta}{y} + \pi$と表せて，$P$の$y$座標は$- \apply{\sin}{\apply
   \end{minipage}
   \caption{$P$が第2,3象限上の点のときの\cref{dfn:sin}の幾何学的解釈，
     弧$AP$の符号付き長さは$\apply{\theta}{y} + \pi$であり，
-  $P$の$y$座標は$\apply{\sin}{\apply{\theta}{y} + \pi} = - \apply{\sin}{\apply{\theta}{y}}$である．}
+    $P$の$y$座標は$\apply{\sin}{\apply{\theta}{y} + \pi} = - \apply{\sin}{\apply{\theta}{y}}$である．}
   \label{fig:circle23}
 \end{figure}
 
@@ -680,7 +681,7 @@ $\apply{\theta}{y} + \pi$と表せて，$P$の$y$座標は$- \apply{\sin}{\apply
 関数$\tan$は，\cref{eq:arctanfunc}における関数$\theta$の逆関数であったから，
 やはりこの関数$\tan$も高校の教科書に載っているものと同じものである．
 
-\subsection{三角関数のに関するいくつかの公式} \label{subsec:identity}
+\subsection{三角関数の基本性質} \label{subsec:identity}
 
 三角関数が積分で定義された関数の逆関数として定義された以上，その導関数は\cref{thm:invderi}により簡単に計算できる．
 まずはのちに使う公式を提示しておく．幾何学的に考察すればその成立はほとんど明らかであろう．
@@ -688,10 +689,10 @@ $\apply{\theta}{y} + \pi$と表せて，$P$の$y$座標は$- \apply{\sin}{\apply
 \begin{lemma} \label{lemma:sin2cos2}
   任意の実数$x$に対して
   \begin{align}
-    \apply{\sin}{-x} & = - \sin x,
-    \label{eq:sinodd} \\
-    \apply{\cos}{-x} & = \cos x,
-    \label{eq:coseven} \\
+    \apply{\sin}{-x}    & = - \sin x,
+    \label{eq:sinodd}                 \\
+    \apply{\cos}{-x}    & = \cos x,
+    \label{eq:coseven}                \\
     \sin^2 x + \cos^2 x & = 1
     \label{eq:sin2cos2}
   \end{align}
@@ -732,14 +733,26 @@ $\apply{\theta}{y} + \pi$と表せて，$P$の$y$座標は$- \apply{\sin}{\apply
 %  $\frac{\pi}{2} < x < \pi$とする．このとき，
 %\end{proof}
 
+\begin{thm} \label{thm:continus}
+  $\sin, \cos, \tan$はいずれもそれぞれの定義域上の連続関数である．
+\end{thm}
+
+\begin{proof}
+  $\sin$から考えよう．開区間$\interval{op}{-\frac{\pi}{2}, \frac{\pi}{2}}$上での
+  連続性は微分積分学の基本定理から即座に従う．
+  また，$\sin$が点$x$で連続ならば，任意の$n \in \Zahlen$に対して
+  $\sin$は点$x + n\pi$でも連続である．これは\cref{eq:sinperiod}からわかる．
+  従ってあとは2点$-\frac{\pi}{2}, \frac{\pi}{2}$での連続性のみを調べればよいが，
+  これはすぐにわかる．$\cos, \tan$も同様である．
+\end{proof}
 
 \begin{thm} \label{thm:trigoderiv}
   関数$\sin, \cos, \tan$はその定義域上全域で微分可能であって，定義域上の各$x$に対して
   \begin{align}
     \diff*{\sin x}x & = \cos x,
-    \label{eq:sinderiv} \\
+    \label{eq:sinderiv}                    \\
     \diff*{\cos x}x & = - \sin x,
-    \label{eq:cosderiv} \\
+    \label{eq:cosderiv}                    \\
     \diff*{\tan x}x & = \frac{1}{\cos^2 x}
     \label{eq:tanderiv}
   \end{align}
@@ -772,7 +785,7 @@ $\apply{\theta}{y} + \pi$と表せて，$P$の$y$座標は$- \apply{\sin}{\apply
   任意の実数$\alpha, \beta$に対して
   \begin{align}
     \apply{\sin}{\alpha + \beta} & = \sin \alpha \cos \beta + \cos \alpha \sin \beta,
-    \label{eq:sinsum} \\
+    \label{eq:sinsum}                                                                 \\
     \apply{\cos}{\alpha + \beta} & = \cos \alpha \cos \beta - \sin \alpha \sin \beta
     \label{eq:cossum}
   \end{align}
@@ -792,7 +805,7 @@ $\apply{\theta}{y} + \pi$と表せて，$P$の$y$座標は$- \apply{\sin}{\apply
   任意の実数$x, \beta$に対し，行列に関して
   \begin{align}
     \begin{bmatrix}
-      \cos x & \sin x \\
+      \cos x   & \sin x \\
       - \sin x & \cos x \\
     \end{bmatrix}
     \begin{bmatrix}
@@ -801,7 +814,7 @@ $\apply{\theta}{y} + \pi$と表せて，$P$の$y$座標は$- \apply{\sin}{\apply
     \end{bmatrix}
     =
     \begin{bmatrix}
-      \cos x \apply{\cos}{x + \beta} + \sin x \apply{\sin}{x + \beta} \\
+      \cos x \apply{\cos}{x + \beta} + \sin x \apply{\sin}{x + \beta}   \\
       - \sin x \apply{\cos}{x + \beta} + \cos x \apply{\sin}{x + \beta} \\
     \end{bmatrix}
     \label{eq:rotationinv}
@@ -811,7 +824,7 @@ $\apply{\theta}{y} + \pi$と表せて，$P$の$y$座標は$- \apply{\sin}{\apply
   その導関数はともに恒等的に0となる．従って$f,g$は定数関数で，\cref{eq:rotationinv}は
   \begin{align}
     \begin{bmatrix}
-      \cos x & \sin x \\
+      \cos x   & \sin x \\
       - \sin x & \cos x \\
     \end{bmatrix}
     \begin{bmatrix}
@@ -829,7 +842,7 @@ $\apply{\theta}{y} + \pi$と表せて，$P$の$y$座標は$- \apply{\sin}{\apply
   \begin{align*}
     \begin{bmatrix}
       \cos x & - \sin x \\
-      \sin x & \cos x \\
+      \sin x & \cos x   \\
     \end{bmatrix}
   \end{align*}
   を左からかけて
@@ -865,10 +878,10 @@ $A = \coord{1,0}$とする．
 弧$AP$の長さは\cref{eq:theta}における関数$\theta$を用いて$\apply{\theta}{y}$と表される．
 このとき，扇形$OAP$の面積$S$は
 \begin{align*}
-  S & = \int_0^y \sqrt{1 - x^2} \intd x - \frac{xy}{2} \\
-  & = y \sqrt{1 - y^2} - \bigintssss_0^y \frac{1 - t^2}{\sqrt{1 - t^2}} \intd t + \bigintssss_0^y \frac{\intd t}{\sqrt{1 - t^2}} - \frac{xy}{2} \\
-  & = \apply{\theta}{y} - \paren{ \int_0^y \sqrt{1 - t^2} \intd t - \frac{xy}{2}} \\
-  & = \apply{\theta}{y} - S
+  S & = \int_0^y \sqrt{1 - x^2} \intd x - \frac{xy}{2}                                                                                            \\
+    & = y \sqrt{1 - y^2} - \bigintssss_0^y \frac{1 - t^2}{\sqrt{1 - t^2}} \intd t + \bigintssss_0^y \frac{\intd t}{\sqrt{1 - t^2}} - \frac{xy}{2} \\
+    & = \apply{\theta}{y} - \paren{ \int_0^y \sqrt{1 - t^2} \intd t - \frac{xy}{2}}                                                               \\
+    & = \apply{\theta}{y} - S
 \end{align*}
 と計算できるから，
 \begin{align}
